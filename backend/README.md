@@ -107,6 +107,20 @@ psql -U postgres -d trivia_test -f trivia.psql
 python test_flaskr.py
 ```
 
+## Environment Variables
+
+Create a `.env` file in the root directory of your project and add the following variables:
+
+```plaintext
+DATABASE_TEST_NAME=trivia_test
+DATABASE_NAME=trivia
+DATABASE_USER=postgres
+DATABASE_PASSWORD=postgres
+DATABASE_HOST=localhost:5432
+```
+
+These variables are required for the application to connect to the PostgreSQL database, but they can be different in your local environment.
+
 # Quiz API Documentation
 
 ## Introduction

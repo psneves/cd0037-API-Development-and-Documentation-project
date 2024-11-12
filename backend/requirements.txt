@@ -13,3 +13,4 @@ six>=1.16.0
 SQLAlchemy>=1.4.0
 Werkzeug>=2.0.0
 pg8000==1.31.2
+python-dotenv==1.0.1

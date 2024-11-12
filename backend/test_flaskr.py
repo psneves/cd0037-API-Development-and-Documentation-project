@@ -7,6 +7,7 @@ from sqlalchemy import text
 
 from flaskr import create_app
 from models import db, Question, Category
+from dotenv import load_dotenv
 
 
 class TriviaTestCase(unittest.TestCase):
@@ -14,10 +15,12 @@ class TriviaTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.database_name = "trivia_test"
-        self.database_user = "postgres"
-        self.database_password = "postgres"
-        self.database_host = "localhost:5432"
+        load_dotenv()
+
+        self.database_name = os.getenv("DATABASE_TEST_NAME")
+        self.database_user = os.getenv("DATABASE_USER")
+        self.database_password = os.getenv("DATABASE_PASSWORD")
+        self.database_host = os.getenv("DATABASE_HOST")
         self.database_path = f"postgresql+pg8000://{self.database_user}:{self.database_password}@{self.database_host}/{self.database_name}"
 
         # Create app with the test configuration
