@@ -2,9 +2,9 @@ from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 database_name = 'trivia'
 database_user = 'postgres'
-database_password = 'password'
+database_password = 'postgres'
 database_host = 'localhost:5432'
-database_path = f'postgresql://{database_user}:{database_password}@{database_host}/{database_name}'
+database_path = f'postgresql+pg8000://{database_user}:{database_password}@{database_host}/{database_name}'
 
 db = SQLAlchemy()
 
@@ -26,7 +26,7 @@ class Question(db.Model):
     id = Column(Integer, primary_key=True)
     question = Column(String, nullable=False)
     answer = Column(String, nullable=False)
-    category = Column(String, nullable=False)
+    category = Column(Integer, nullable=False)
     difficulty = Column(Integer, nullable=False)
 
     def __init__(self, question, answer, category, difficulty):
@@ -37,7 +37,12 @@ class Question(db.Model):
 
     def insert(self):
         db.session.add(self)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except Exception as e:
+            print(f"Error inserting record: {e}")
+            db.session.rollback()
+            db.session.flush()
 
     def update(self):
         db.session.commit()

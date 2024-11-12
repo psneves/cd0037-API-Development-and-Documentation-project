@@ -12,9 +12,9 @@ class TriviaTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.database_name = "trivia_test"
         self.database_user = "postgres"
-        self.database_password = "password"
+        self.database_password = "postgres"
         self.database_host = "localhost:5432"
-        self.database_path = f"postgresql://{self.database_user}:{self.database_password}@{self.database_host}/{self.database_name}"
+        self.database_path = f"postgresql: //{self.database_user}:{self.database_password}@{self.database_host}/{self.database_name}"
 
         # Create app with the test configuration
         self.app = create_app({
@@ -34,10 +34,8 @@ class TriviaTestCase(unittest.TestCase):
             db.session.remove()
             db.drop_all()
 
-    """
-    TODO
-    Write at least one test for each test for successful operation and for expected errors.
-    """
+    
+
 
 
 # Make the tests conveniently executable
