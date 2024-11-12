@@ -97,8 +97,170 @@ Write at least one test for the success and at least one error behavior of each 
 To deploy the tests, run
 
 ```bash
-dropdb trivia_test
-createdb trivia_test
-psql trivia_test < trivia.psql
+psql -U postgres -d trivia_test
+```
+
+```bash
+dropdb -U postgres trivia_test
+createdb -U postgres trivia_test
+psql -U postgres -d trivia_test -f trivia.psql
 python test_flaskr.py
 ```
+
+# Quiz API Documentation
+
+## Introduction
+
+This API serves a quiz application, allowing users to retrieve categories, questions, and quiz sessions. It provides endpoints for creating, retrieving, updating, and deleting quiz questions, as well as filtering questions by category and search terms.
+
+## Getting Started
+
+- **Base URL:** `http://127.0.0.1:5000/` (for local development)
+- **Authentication:** None required for the current setup
+
+## Error Handling
+
+The API returns standard HTTP response codes for errors, along with a JSON object detailing the error.
+
+- **404 Not Found:** Resource does not exist
+- **422 Unprocessable Entity:** Request contains invalid data
+- **400 Bad Request:** Required fields are missing
+- **405 Method Not Allowed:** HTTP method is not allowed
+Error Response Example:
+```json
+{
+  "success": false,
+  "error": 404,
+  "message": "Not found"
+}
+```
+
+### Endpoints
+
+**GET /categories**
+
+Retrieve all available categories.
+
+- **URL:** `/categories`
+- **Method:** `GET`
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "categories": {
+      "1": "Science",
+      "2": "Art",
+      "3": "Geography",
+      "4": "History",
+      "5": "Entertainment",
+      "6": "Sports"
+    }
+  }
+  ```
+
+**GET /questions**
+
+Retrieve paginated questions (10 per page), including total question count and categories.
+
+- **URL:** `/questions?page=<int>`
+- **Method:** `GET`
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "questions": [<question_object>, ...],
+    "total_questions": 100,
+    "current_category": null,
+    "categories": { "1": "Science", "2": "Art", ... }
+  }
+  ```ze
+
+**DELETE /questions/<question_id>**
+
+Delete a specific question by its ID.
+
+- **URL:** `/questions/<question_id>`
+- **Method:** `DELETE`
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "deleted": <question_id>
+  }
+  ```
+
+**POST /questions**
+
+Create a new question or search for questions by a search term.
+
+- **URL:** `/questions`
+- **Method:** `POST`
+- **Request:**
+  - To create a question:
+    ```json
+    {
+      "question": "What is the capital of France?",
+      "answer": "Paris",
+      "difficulty": 2,
+      "category": 3
+    }
+    ```
+  - To search for questions:
+    ```json
+    {
+      "searchTerm": "title"
+    }
+    ```
+- **Response (Create question):**
+  ```json
+  {
+    "success": true,
+    "created": <question_id>
+  }
+  ```
+- **Response (Search Questions):**
+  ```json
+  {
+    "success": true,
+    "questions": [<question_object>, ...],
+    "total_questions": <count>,
+    "current_category": null
+  }
+  ```
+
+**GET /categories/<category_id>/questions**
+
+Retrieve questions for a specific category.
+
+- **URL:** `/categories/<category_id>/questions`
+- **Method:** `GET`
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "questions": [<question_object>, ...],
+    "total_questions": <count>,
+    "current_category": "Science"
+  }
+  ```
+
+**POST /quizzes**
+
+Get a random question to play a quiz, based on category and previous questions.
+
+- **URL:** `/quizzes`
+- **Method:** `POST`
+- **Request:**
+  ```json
+  {
+    "previous_questions": [1, 4, 20],
+    "quiz_category": { "id": 2, "type": "Art" }
+  }
+  ```
+- **Response:**
+  ```json
+  {
+    "success": true,
+    "question": <question_object> or null
+  }
+  ```
