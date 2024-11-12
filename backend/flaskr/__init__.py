@@ -2,7 +2,7 @@ from flask import Flask, request, abort, jsonify
 from flask_cors import CORS
 import random
 
-from backend.models import setup_db, Question, Category, db
+from models import setup_db, Question, Category, db
 
 QUESTIONS_PER_PAGE = 10
 
